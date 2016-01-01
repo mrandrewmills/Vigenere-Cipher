@@ -3,6 +3,7 @@
  *  @type {object}
  *  @namespace
  */
+
 var vigenere = {
 
       /**
@@ -29,9 +30,9 @@ var vigenere = {
        */
         alphabets: [],
 
-        /**
-         *
-         */
+      /**
+       *  init - create our plaintext alphabet and Vigenere table
+       */
         init: function init() {
 
             "use strict";
@@ -48,9 +49,27 @@ var vigenere = {
             }
         },
 
-        /**
-         *
-         */
+      /**
+       *  buildKeyword - convert user-provided password to ALL CAPS ALPHAs only
+       *  @param {String} password, the user-provided password to reduce
+       */
+
+        buildKeyword : function buildKeyword(password) {
+
+            "use strict";
+
+            password = password.match(/[A-Za-z]/g);
+            password = password.toString();
+            password = password.replace(/[,]/g, "");
+
+            this.keyword = password.toUpperCase();
+        },
+
+      /**
+       *  encrypt - creates ciphertext using the Vigenere algorithm
+       *  @param {String} plaintext, the message to convert into ciphertext
+       *  @param {String} password, the key to use in the Vigenere cipher
+       */
         encrypt : function encrypt(plaintext, password) {
 
             "use strict";
@@ -58,7 +77,8 @@ var vigenere = {
             var x, pwIndex, vRow, thisLetter, thisRow;
 
             // initialize defaults
-            this.keyword = password.toUpperCase();
+            //this.keyword = password.toUpperCase();
+            this.buildKeyword(password);
             this.plaintext = plaintext.toUpperCase();
             this.ciphertext = "";
 
@@ -94,15 +114,18 @@ var vigenere = {
             return this.ciphertext;
         },
 
-        /**
-         *
-         */
+      /**
+       *  decrypt - creates plaintext using the Vigenere algorithm
+       *  @param {String} ciphertext, the message to be deciphered
+       *  @param {String} password, the Vigenere key to use in the deciphering process.
+       */
         decrypt : function decrypt(ciphertext, password) {
 
             "use strict";
 
             // initialize defaults
-            this.keyword = password.toUpperCase();
+            // this.keyword = password.toUpperCase();
+            this.buildKeyword(password);
             this.plaintext = "";
             this.ciphertext = ciphertext;
 
