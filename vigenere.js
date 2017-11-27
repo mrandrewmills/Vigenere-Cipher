@@ -99,10 +99,9 @@ var vigenere = {
                     // otherwise find its counterpart in the V. table
                     thisRow = this.alphabets[vRow];
                     this.ciphertext += thisRow[thisLetter];
+	              // don't forget to move to next letter in our password
+        	        pwIndex = pwIndex + 1;
                 }
-
-                // don't forget to move to next letter in our password
-                pwIndex = pwIndex + 1;
 
                 // if we "run out of password", start back at 1st letter again
                 if (pwIndex >= this.keyword.length) {
@@ -127,9 +126,8 @@ var vigenere = {
             // this.keyword = password.toUpperCase();
             this.buildKeyword(password);
             this.plaintext = "";
-            this.ciphertext = ciphertext;
+            this.ciphertext = ciphertext.toUpperCase();
 
-            // we'll need to keep track of which letter of the password we're currently using
             var pwIndex, x, vRow, thisLetter, thisRow;
 
             // we'll need to keep track of which letter of the password we're currently using
@@ -150,10 +148,9 @@ var vigenere = {
                     // otherwise find its counterpart "backwards" in the V. table
                     thisRow = this.alphabets[0]; // this will always be the first row
                     this.plaintext += thisRow[thisLetter];
+                    // don't forget to move to next letter in our password
+                    pwIndex = pwIndex + 1;
                 }
-
-                // don't forget to move to next letter in our password
-                pwIndex = pwIndex + 1;
 
                 // if we "run out of password", start back at 1st letter again
                 if (pwIndex >= this.keyword.length) {
