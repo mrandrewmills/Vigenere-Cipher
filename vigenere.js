@@ -4,7 +4,7 @@
   *  @namespace
   */
 
-function vigenere() {
+function Vigenere() {
 
     "use strict";
 
