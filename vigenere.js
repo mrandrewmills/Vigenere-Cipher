@@ -12,40 +12,40 @@ function Vigenere() {
      * plaintext - the real, original message
      * @type {String}
      */
-    this.plaintext = "";
+    var plaintext = "";
 
     /**
      * ciphertext - the encrypted version of the message
      * @type {String}
      */
-    this.ciphertext = "";
+    var ciphertext = "";
 
     /**
      * keyword - the password used to encrypt and decrypt the ciphertext
      * @type {String}
      */
-    this.keyword = "";
+    var keyword = "";
 
     /**
      * alphabets - a slightly modified version of the Vigenere table,
      * @type {Array}
      */
-    this.alphabets = [];
+    var alphabets = [];
 
     /**
      *  init - create our plaintext alphabet and Vigenere table
      */
-    this.init = function init() {
+    var init = function init() {
 
         var x;
 
         // populate the first row of our Vigenere table
-        this.alphabets[0] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        alphabets[0] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         // populate the rest of our Vigenere table
-        for (x = 1; x < this.alphabets[0].length; x = x + 1) {
-            this.alphabets[x] = this.alphabets[0].substr(x);
-            this.alphabets[x] = this.alphabets[x].concat(this.alphabets[0].substring(0, x));
+        for (x = 1; x < alphabets[0].length; x = x + 1) {
+            alphabets[x] = alphabets[0].substr(x);
+            alphabets[x] = alphabets[x].concat(alphabets[0].substring(0, x));
         }
     };
 
@@ -53,13 +53,13 @@ function Vigenere() {
      *  buildKeyword - convert user-provided password to ALL CAPS ALPHAs only
      *  @param {String} password, the user-provided password to reduce
      */
-    this.buildKeyword = function buildKeyword(password) {
+    var buildKeyword = function buildKeyword(password) {
 
         password = password.match(/[A-Za-z]/g);
         password = password.toString();
         password = password.replace(/[,]/g, "");
 
-        this.keyword = password.toUpperCase();
+        keyword = password.toUpperCase();
     };
 
     /**
@@ -73,39 +73,39 @@ function Vigenere() {
 
         // initialize defaults
         //this.keyword = password.toUpperCase();
-        this.buildKeyword(password);
-        this.plaintext = plaintext.toUpperCase();
-        this.ciphertext = "";
+        buildKeyword(password);
+        plaintext = plaintext.toUpperCase();
+        ciphertext = "";
 
         // we'll need to keep track of which letter of the password we're currently using
         pwIndex = 0;
 
         // time to traverse the plaintext message
-        for (x = 0; x < this.plaintext.length; x = x + 1) {
+        for (x = 0; x < plaintext.length; x = x + 1) {
             // first figure out which row of the Vigenere table we must use
-            vRow = this.alphabets[0].indexOf(this.keyword[pwIndex]);
-            thisLetter = this.alphabets[0].indexOf(this.plaintext[x]);
+            vRow = alphabets[0].indexOf(keyword[pwIndex]);
+            thisLetter = alphabets[0].indexOf(plaintext[x]);
 
             // if the next char of plaintext is NOT a capital letter
             if (thisLetter === -1) {
                 // then just pass it through unchanged
-                this.ciphertext += this.plaintext[x];
+                ciphertext += plaintext[x];
             } else {
                 // otherwise find its counterpart in the V. table
-                thisRow = this.alphabets[vRow];
-                this.ciphertext += thisRow[thisLetter];
+                thisRow = alphabets[vRow];
+                ciphertext += thisRow[thisLetter];
                 // don't forget to move to next letter in our password
                 pwIndex = pwIndex + 1;
             }
 
             // if we "run out of password", start back at 1st letter again
-            if (pwIndex >= this.keyword.length) {
+            if (pwIndex >= keyword.length) {
                 pwIndex = 0;
             }
         }
 
         // now we're ready to share the encrypted result
-        return this.ciphertext;
+        return ciphertext;
     };
 
     /**
@@ -117,9 +117,9 @@ function Vigenere() {
 
         // initialize defaults
         // this.keyword = password.toUpperCase();
-        this.buildKeyword(password);
-        this.plaintext = "";
-        this.ciphertext = ciphertext.toUpperCase();
+        buildKeyword(password);
+        plaintext = "";
+        ciphertext = ciphertext.toUpperCase();
 
         var pwIndex, x, vRow, thisLetter, thisRow;
 
@@ -127,34 +127,34 @@ function Vigenere() {
         pwIndex = 0;
 
         // let's traverse the ciphertext message
-        for (x = 0; x < this.ciphertext.length; x = x + 1) {
+        for (x = 0; x < ciphertext.length; x = x + 1) {
 
             // figure out which row of the Vigenere table should have been used with this password
-            vRow = this.alphabets[0].indexOf(this.keyword[pwIndex]);
-            thisLetter = this.alphabets[vRow].indexOf(this.ciphertext[x]);
+            vRow = alphabets[0].indexOf(keyword[pwIndex]);
+            thisLetter = alphabets[vRow].indexOf(ciphertext[x]);
 
             // if the next char of ciphertext is NOT a capital letter
             if (thisLetter === -1) {
                 // then just pass it through unchanged
-                this.plaintext += this.ciphertext[x];
+                plaintext += ciphertext[x];
             } else {
                 // otherwise find its counterpart "backwards" in the V. table
-                thisRow = this.alphabets[0]; // this will always be the first row
-                this.plaintext += thisRow[thisLetter];
+                thisRow = alphabets[0]; // this will always be the first row
+                plaintext += thisRow[thisLetter];
                 // don't forget to move to next letter in our password
                 pwIndex = pwIndex + 1;
             }
 
             // if we "run out of password", start back at 1st letter again
-            if (pwIndex >= this.keyword.length) {
+            if (pwIndex >= keyword.length) {
                 pwIndex = 0;
             }
         }
 
         // now we're ready to share the decrypted result
-        return this.plaintext;
+        return plaintext;
     };
 
-    this.init(); // build out our alphabets grid
+    init(); // build out our alphabets grid
     return this;
 }
